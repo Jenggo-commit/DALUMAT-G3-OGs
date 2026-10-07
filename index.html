@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Chronicle Scrapbook - 10 Souls & Stories</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Courier Prime', monospace;
+            background-color: #e8dfd8;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(200, 185, 170, 0.4) 0%, rgba(130, 110, 95, 0.2) 100%),
+                repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.01) 10px, rgba(0,0,0,0.01) 20px);
+            color: #2c221e;
+            overflow-x: hidden;
+        }
+
+        .font-handwriting {
+            font-family: 'Caveat', cursive;
+        }
+
+        .font-typewriter {
+            font-family: 'Special Elite', cursive;
+        }
+
+        .font-serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Torn paper effect using CSS mask or clip-path approximation */
+        .torn-edge-top {
+            clip-path: polygon(0% 5%, 3% 0%, 7% 4%, 11% 1%, 15% 5%, 20% 0%, 25% 4%, 30% 1%, 35% 5%, 40% 0%, 45% 4%, 50% 1%, 55% 5%, 60% 0%, 65% 4%, 70% 1%, 75% 5%, 80% 0%, 85% 4%, 90% 1%, 95% 5%, 100% 0%, 100% 100%, 0% 100%);
+        }
+
+        .polaroid {
+            background: #fffdf9;
+            box-shadow: 3px 4px 12px rgba(0,0,0,0.2), inset 0 0 15px rgba(0,0,0,0.03);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+        }
+
+        .polaroid:hover {
+            transform: translateY(-5px) rotate(1deg) scale(1.02);
+            box-shadow: 5px 8px 20px rgba(0,0,0,0.25);
+            z-index: 20;
+        }
+
+        .washi-tape {
+            background-color: rgba(245, 230, 190, 0.65);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: absolute;
+            height: 26px;
+            width: 90px;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-1deg);
+            z-index: 10;
+            backdrop-filter: blur(1px);
+            border-left: 2px dashed rgba(0,0,0,0.1);
+            border-right: 2px dashed rgba(0,0,0,0.1);
+        }
+
+        .washi-tape-pink {
+            background-color: rgba(243, 198, 204, 0.7);
+            transform: translateX(-50%) rotate(2deg);
+        }
+
+        .washi-tape-blue {
+            background-color: rgba(188, 214, 224, 0.7);
+            transform: translateX(-50%) rotate(-1.5deg);
+        }
+
+        .stamp {
+            border: 2px dashed #b54a32;
+            color: #b54a32;
+            font-family: 'Special Elite', cursive;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            transform: rotate(-6deg);
+            display: inline-block;
+            background: rgba(181, 74, 50, 0.05);
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .journal-page {
+            background: #f4efe6;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15), inset 0 0 60px rgba(180, 150, 120, 0.1);
+            position: relative;
+        }
+
+        /* Custom scrollbar for journal modals */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e6dfd3;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #b5a48b;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-200 selection:text-amber-900">
+
+    <header class="w-full py-8 px-4 text-center relative border-b border-amber-900/10 bg-[#e3d7cb]/40">
+        <div class="absolute top-4 left-6 hidden md:block opacity-60 rotate-[-8deg] pointer-events-none">
+            <span class="stamp text-sm">Vol. III • Curated Souls</span>
+        </div>
+        <div class="absolute top-4 right-6 hidden md:block opacity-60 rotate-[6deg] pointer-events-none">
+            <span class="stamp text-sm" style="border-color: #2b5c8f; color: #2b5c8f;">The 2026 Archive</span>
+        </div>
+        
+        <h1 class="text-4xl md:text-6xl font-serif-title tracking-wide text-[#382b23] mb-2 drop-shadow-sm">
+            The Dalumat G3 Archive
+        </h1>
+        <p class="font-handwriting text-2xl md:text-3xl text-[#7a5c48] max-w-xl mx-auto">
+            A tactile collection of ten wandering lives, forgotten polaroids, and quiet stories.
+        </p>
+    </header>
+
+    <main class="container mx-auto px-4 py-12 flex-grow">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto" id="profiles-grid">
+            <!-- Dynamic profile cards will be injected here via JavaScript -->
+        </div>
+    </main>
+
+    <div id="journal-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="journal-page w-full max-w-3xl max-h-[90vh] rounded-lg p-6 md:p-10 overflow-y-auto transform scale-95 transition-transform duration-300 relative shadow-2xl" id="modal-content-box">
+            <!-- Close Button -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-2xl font-bold w-10 h-10 rounded-full bg-[#d6c9b4] hover:bg-[#c4b59d] text-[#382b23] flex items-center justify-center transition-colors shadow-sm">
+                &times;
+            </button>
+            <div id="modal-body">
+                <!-- Content populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="w-full py-6 text-center border-t border-amber-900/10 text-xs md:text-sm text-[#7a5c48] font-typewriter bg-[#dfd3c3]/50">
+        <p>Hand-bound digital artifact &bull; Click any polaroid or ticket stub to inspect the journal entry.</p>
+    </footer>
+
+    <script>
+        // 10 Unique people data for the junk journal
+        const peopleData = [
+            {
+                id: 1,
+                name: "Yumi",
+                role: "Member",
+                location: "N/A",
+                date: "N/A",
+                image: "",
+                fallbackImage: "https://placehold.co/600x600/d6c9b4/382b23?text=Yumi",
+                quote: "N/A",
+                bio: "N/A",
+                notes: [
+                    "N/A",
+                    "N/A",
+                    "N/A"
+                ],
+                stampText: "N/A",
+                tapeColor: "washi-tape"
+            },
+            {
+                id: 2,
+                name: "Daria",
+                role: "Member",
+                location: "N/A",
+                date: "N/A",
+                image: "",
+                fallbackImage: "https://placehold.co/600x600/d6c9b4/382b23?text=Daria",
+                quote: "N/A",
+                bio: "N/A",
+                notes: [
+                    "N/A",
+                    "N/A",
+                    "N/A"
+                ],
+                stampText: "N/A",
+                tapeColor: "washi-tape-pink"
+            },
+            {
+                id: 3,
+                name: "Von",
+                role: "Member",
+                location: "N/A",
+                date: "N/A",
+                image: "",
+                fallbackImage: "https://placehold.co/600x600/d6c9b4/382b23?text=Von",
+                quote: "N/A",
+                bio: "N/A",
+                notes: [
+                    "N/A",
+                    "N/A",
+                    "N/A"
+                ],
+                stampText: "N/A",
+                tapeColor: "washi-tape-blue"
+            },
+            {
+                id: 4,
+                name: "Jomel",
+                role: "Member",
+                location: "N/A",
+                date: "N/A",
+                image: "",
+                fallbackImage: "https://placehold.co/600x600/d6c9b4/382b23?text=Jomel",
+                quote: "N/A",
+                bio: "N/A",
+                notes: [
+                    "N/A",
+                    "N/A",
+                    "N/A"
+                ],
+                stampText: "N/A",
+                tapeColor: "washi-tape"
+            },
+            {
+                id: 5,
+                name: "Brent",
+                role: "Member",
+                location: "N/A",
+                date: "N/A",
+                image: "",
+                fallbackImage: "https://placehold.co/600x600/d6c9b4/382b23?text=Brent",
+                quote: "N/A",
+                bio: "N/A",
+                notes: [
+                    "N/A",
+                    "N/A",
+                    "N/A"
+                ],
+                stampText: "Darkroom Log",
+                tapeColor: "washi-tape-pink"
+            },
+            {
+                id: 6,
+                name: "Jan Carlo",
+                role: "Member",
+                location: "N/A",
+                date: "N/A",
+                image: "",
+                fallbackImage: "https://placehold.co/600x600/d6c9b4/382b23?text=Jan+Carlo",
+                quote: "N/A",
+                bio: "N/A",
+                notes: [
+                    "N/A",
+                    "N/A",
+                    "N/A"
+                ],
+                stampText: "N/A",
+                tapeColor: "washi-tape-blue"
+            },
+            {
+                id: 7,
+                name: "VJ",
+                role: "Member",
+                location: "N/A",
+                date: "N/A",
+                image: "",
+                fallbackImage: "https://placehold.co/600x600/d6c9b4/382b23?text=VJ",
+                quote: "N/A",
+                bio: "N/A",
+                notes: [
+                    "N/A",
+                    "N/A",
+                    "N/A"
+                ],
+                stampText: "N/A",
+                tapeColor: "washi-tape"
+            },
+            {
+                id: 8,
+                name: "Nathan",
+                role: "Member",
+                location: "N/A",
+                date: "N/A",
+                image: "",
+                fallbackImage: "https://placehold.co/600x600/d6c9b4/382b23?text=Nathan",
+                quote: "N/A",
+                bio: "N/A",
+                notes: [
+                    "N/A",
+                    "N/A",
+                    "N/A"
+                ],
+                stampText: "N/A",
+                tapeColor: "washi-tape-pink"
+            },
+            {
+                id: 9,
+                name: "Vei",
+                role: "Member",
+                location: "N/A",
+                date: "N/A",
+                image: "",
+                fallbackImage: "https://placehold.co/600x600/d6c9b4/382b23?text=Vei",
+                quote: "N/A",
+                bio: "N/A",
+                notes: [
+                    "N/A",
+                    "N/A",
+                    "N/A"
+                ],
+                stampText: "N/A",
+                tapeColor: "washi-tape-blue"
+            },
+            {
+                id: 10,
+                name: "Hanz",
+                role: "Member",
+                location: "Sa tabi tabi lang",
+                date: "date? tayo",
+                image: "",
+                fallbackImage: "https://placehold.co/600x600/d6c9b4/382b23?text=Hanz+Mendezabal",
+                quote: "Lahat ng tao ay cool",
+                bio: "hi ako si hanz",
+                notes: [
+                    "cookies for sale",
+                    "di ako marunong magcode",
+                    "beng beng beng"
+                ],
+                stampText: "N/A",
+                tapeColor: "washi-tape"
+            }
+        ];
+
+        // Render profile cards into the grid
+        function renderProfiles() {
+            const grid = document.getElementById('profiles-grid');
+            grid.innerHTML = '';
+
+            peopleData.forEach((person, index) => {
+                const card = document.createElement('div');
+                card.className = "relative p-4 md:p-6 bg-[#f7f3eb] shadow-md hover:shadow-xl transition-all duration-300 rounded transform " + (index % 2 === 0 ? "rotate-[-1deg]" : "rotate-[1deg]");
+                card.style.backgroundImage = "radial-gradient(circle, rgba(0,0,0,0.02) 1px, transparent 1px)";
+                card.style.backgroundSize = "16px 16px";
+
+                card.innerHTML = `
+                    <!-- Washi tape decoration -->
+                    <div class="${person.tapeColor}"></div>
+
+                    <!-- Stamp watermark -->
+                    <div class="absolute top-6 right-6 z-10 pointer-events-none opacity-80">
+                        <span class="stamp text-[10px] md:text-xs">${person.stampText}</span>
+                    </div>
+
+                    <!-- Polaroid Photo Frame -->
+                    <div class="polaroid p-3 pb-6 mb-4 transform rotate-1 cursor-pointer group" onclick="openJournal(${person.id})">
+                        <div class="overflow-hidden bg-[#e0d6c8] aspect-square relative">
+                            <img src="${person.image}" alt="${person.name}" class="w-full h-full object-cover filter sepia-[0.2] contrast-[1.05] group-hover:scale-105 transition-transform duration-500" onerror="this.src='${person.fallbackImage}'">
+                            <div class="absolute inset-0 bg-amber-900/10 pointer-events-none"></div>
+                        </div>
+                        <div class="mt-3 text-center">
+                            <p class="font-handwriting text-xl text-[#523d30]">Photo #${person.id} - ${person.date.split(',')[1] || person.date}</p>
+                        </div>
+                    </div>
+
+                    <!-- Bio Snippet -->
+                    <div class="px-2">
+                        <div class="flex items-baseline justify-between mb-1">
+                            <h3 class="font-serif-title text-xl md:text-2xl font-bold text-[#2c221e]">${person.name}</h3>
+                            <span class="font-typewriter text-xs text-[#8c6d56]">${person.location}</span>
+                        </div>
+                        <p class="font-typewriter text-xs uppercase tracking-wider text-[#b54a32] mb-3">${person.role}</p>
+                        <p class="font-handwriting text-lg text-[#4a3b32] italic mb-4 line-clamp-2">"${person.quote}"</p>
+
+                        <!-- Action Button / Ticket Stub -->
+                        <div class="flex justify-between items-center pt-3 border-t border-dashed border-amber-900/20">
+                            <span class="font-typewriter text-[11px] text-[#7a6252]">Click to open journal</span>
+                            <button onclick="openJournal(${person.id})" class="px-4 py-1.5 bg-[#4a3b32] text-[#f4efe6] font-typewriter text-xs rounded hover:bg-[#2c221e] transition-colors shadow-sm">
+                                Read Entry &rarr;
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Open Journal Modal
+        function openJournal(id) {
+            const person = peopleData.find(p => p.id === id);
+            if (!person) return;
+
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <div class="flex flex-col md:flex-row gap-8 items-start">
+                    <!-- Left: Large Polaroid & Stamps -->
+                    <div class="w-full md:w-5/12 flex-shrink-0">
+                        <div class="polaroid p-4 pb-8 transform -rotate-2 relative shadow-lg">
+                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 w-24 h-6 bg-amber-200/60 rotate-1 z-10"></div>
+                            <img src="${person.image}" alt="${person.name}" class="w-full aspect-square object-cover filter sepia-[0.15]" onerror="this.src='${person.fallbackImage}'">
+                            <div class="mt-4 text-center">
+                                <h4 class="font-handwriting text-2xl text-[#382b23]">${person.name}</h4>
+                                <p class="font-typewriter text-xs text-[#8c6d56]">${person.date}</p>
+                            </div>
+                        </div>
+                        <div class="mt-6 p-4 bg-[#ede4d5] rounded border border-amber-900/10">
+                            <p class="font-typewriter text-xs text-[#6e5340] uppercase tracking-widest mb-1">Location Tag</p>
+                            <p class="font-handwriting text-xl text-[#382b23]">${person.location}</p>
+                            <div class="mt-3 pt-3 border-t border-amber-900/10 flex justify-between items-center">
+                                <span class="stamp text-xs">${person.stampText}</span>
+                                <span class="font-typewriter text-xs text-[#8c6d56]">Archive ID: #00${person.id}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Handwritten Story & Notes -->
+                    <div class="w-full md:w-7/12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-typewriter text-xs px-2.5 py-1 bg-[#d6c9b4] text-[#4a3b32] rounded uppercase">${person.role}</span>
+                                <span class="font-handwriting text-xl text-[#b54a32]">Personal Archive</span>
+                            </div>
+                            <h2 class="font-serif-title text-3xl md:text-4xl text-[#2c221e] mb-4">${person.name}</h2>
+                            
+                            <blockquote class="font-handwriting text-2xl text-[#6e4e37] italic border-l-4 border-[#b54a32] pl-4 py-1 mb-6">
+                                "${person.quote}"
+                            </blockquote>
+
+                            <div class="space-y-4 mb-6">
+                                <h4 class="font-typewriter text-sm font-bold uppercase text-[#5a4332] tracking-wider">Bio</h4>
+                                <p class="font-typewriter text-sm md:text-base text-[#382b23] leading-relaxed">
+                                    ${person.bio}
+                                </p>
+                            </div>
+
+                            <div class="space-y-3 p-4 bg-[#e8dece] rounded border border-dashed border-[#bfae96]">
+                                <h4 class="font-typewriter text-xs font-bold uppercase text-[#6e5340] tracking-wider">Scrapbook Margin Notes</h4>
+                                <ul class="space-y-2">
+                                    ${person.notes.map(note => `
+                                        <li class="font-handwriting text-xl text-[#423228] flex items-start">
+                                            <span class="text-[#b54a32] mr-2 font-bold">&bull;</span>
+                                            <span>${note}</span>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 pt-4 border-t border-amber-900/15 flex justify-between items-center">
+                            <span class="font-handwriting text-lg text-[#7a5c48]">The Dalumat Archives &bull; 2026</span>
+                            <button onclick="closeModal()" class="px-6 py-2 bg-[#b54a32] text-white font-typewriter text-xs rounded hover:bg-[#9a3d28] transition-colors shadow-sm">
+                                Close Journal
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const modal = document.getElementById('journal-modal');
+            const box = document.getElementById('modal-content-box');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            box.classList.remove('scale-95');
+            box.classList.add('scale-100');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close Journal Modal
+        function closeModal() {
+            const modal = document.getElementById('journal-modal');
+            const box = document.getElementById('modal-content-box');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            box.classList.remove('scale-100');
+            box.classList.add('scale-95');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close on backdrop click
+        document.getElementById('journal-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'journal-modal') {
+                closeModal();
+            }
+        });
+
+        // Close on ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Initialize on load
+        window.onload = function() {
+            renderProfiles();
+        };
+    </script>
+</body>
+</html>
